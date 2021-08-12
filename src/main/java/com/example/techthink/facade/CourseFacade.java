@@ -43,13 +43,13 @@ public class CourseFacade {
 
     }
 
-//    public CourseResponse readALl(){
-//        List<Course> courses = courseService.readAll();
-//        List<List<SubCategory>> collect = courses.stream()
-//                .map(each -> subCategoryCourseRepository.findSubCategories(each.getId()))
-//                .collect(Collectors.toList());
-//
-//    }
+    public List<CourseResponse> readAll(){
+        List<Course> courses = courseService.readAll();
+        List<CourseResponse> collect = courses.stream()
+                .map(each -> readById(each.getId()))
+                .collect(Collectors.toList());
+        return collect;
+    }
 
     public CourseResponse update(Integer id, CourseRequest request){
         CourseDTO courseDTO = convertToDTO(request);
@@ -72,12 +72,4 @@ public class CourseFacade {
         return courseDTO;
     }
 
-
-
-
-//    Course create(CourseDTO request);
-//    Course readById(Integer id);
-//    List<Course> readAll();
-//    Course update(Integer id, CourseDTO request);
-//    Boolean delete(Integer id);
 }

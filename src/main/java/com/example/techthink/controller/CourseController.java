@@ -33,7 +33,11 @@ public class CourseController {
         return body;
     }
 
-    //TODO  readAll
+    @GetMapping(value = "/courses")
+    public ResponseEntity<List<CourseResponse>> readAl(){
+        ResponseEntity<List<CourseResponse>> body = ResponseEntity.status(HttpStatus.CREATED).body(facade.readAll());
+        return body;
+    }
 
     @PutMapping(value = "/update/course/{id}")
     public ResponseEntity<CourseResponse> update(@RequestBody CourseRequest request, @PathVariable Integer id){

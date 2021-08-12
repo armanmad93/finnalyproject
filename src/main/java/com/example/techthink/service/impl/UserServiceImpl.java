@@ -20,6 +20,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User loadByUsernameOrEmail(String term) {
+        User user = userRepository.loadUserByUsernameOrEmail(term);
+        return user;
+    }
+
+    @Override
     public User register(UserDTO request){
         User user = buildUser(request);
         User savedUser = userRepository.save(user);
