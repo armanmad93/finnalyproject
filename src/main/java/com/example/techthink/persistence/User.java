@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "users", uniqueConstraints = {
+@Table(name = "user", uniqueConstraints = {
         @UniqueConstraint(columnNames = {
                 "username"
         }),
@@ -24,9 +24,11 @@ public class User {
     private String username;
     private String email;
     private String password;
+    private String description;
+    private String profilePictureURL;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "user_roles",
+    @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<Role> roles = new ArrayList<>();
@@ -34,13 +36,31 @@ public class User {
     public User() {
     }
 
-    public User(Long id, String first_name, String last_name, String username, String email, String password) {
+    public User(Long id, String first_name, String last_name, String username, String email, String password, String description, String profilePictureURL) {
         this.id = id;
         this.first_name = first_name;
         this.last_name = last_name;
         this.username = username;
         this.email = email;
         this.password = password;
+        this.description = description;
+        this.profilePictureURL = profilePictureURL;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getProfilePictureURL() {
+        return profilePictureURL;
+    }
+
+    public void setProfilePictureURL(String profilePicture) {
+        this.profilePictureURL = profilePicture;
     }
 
     public Long getId() {

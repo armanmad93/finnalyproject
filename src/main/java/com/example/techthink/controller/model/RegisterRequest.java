@@ -6,16 +6,20 @@ public class RegisterRequest {
     private String userName;
     private String mail;
     private String password;
+    private String description;
+    private String profilePictureURL;
 
     public RegisterRequest() {
     }
 
-    public RegisterRequest(String firstName, String lastName, String userName, String mail, String password) {
+    public RegisterRequest(String firstName, String lastName, String userName, String mail, String password, String description, String profilePictureURL) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.userName = userName;
         this.mail = mail;
         this.password = password;
+        this.description = description;
+        this.profilePictureURL = profilePictureURL;
     }
 
     public String getFirstName() {
@@ -56,5 +60,21 @@ public class RegisterRequest {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getProfilePictureURL() {
+        return profilePictureURL;
+    }
+
+    public void setProfilePictureURL(String profilePictureURL) {
+        this.profilePictureURL = profilePictureURL;
     }
 }

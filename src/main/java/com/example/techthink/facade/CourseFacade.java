@@ -30,15 +30,15 @@ public class CourseFacade {
     public CourseResponse create(CourseRequest request){
         CourseDTO courseDTO = convertToDTO(request);
         Course course = courseService.create(courseDTO);
-        List<SubCategory> subCategories = subCategoryCourseRepository.findSubCategories(course.getId());
-        CourseResponse courseResponse = converter.fromCourseToResponse(course, subCategories);
+        CourseResponse courseResponse = converter.fromCourseToResponse(course);
         return courseResponse;
     }
 
     public CourseResponse readById(Integer id){
         Course course = courseService.readById(id);
-        List<SubCategory> subCategories = subCategoryCourseRepository.findSubCategories(course.getId());
-        CourseResponse courseResponse = converter.fromCourseToResponse(course, subCategories);
+        CourseResponse courseResponse = converter.fromCourseToResponse(course);
+//        List<SubCategory> subCategories = subCategoryCourseRepository.findSubCategories(course.getId());
+//        CourseResponse courseResponse = converter.fromCourseToResponse(course, subCategories);
         return courseResponse;
 
     }
@@ -54,8 +54,9 @@ public class CourseFacade {
     public CourseResponse update(Integer id, CourseRequest request){
         CourseDTO courseDTO = convertToDTO(request);
         Course updatedCourse = courseService.update(id, courseDTO);
-        List<SubCategory> subCategories = subCategoryCourseRepository.findSubCategories(updatedCourse.getId());
-        CourseResponse courseResponse = converter.fromCourseToResponse(updatedCourse, subCategories);
+        CourseResponse courseResponse = converter.fromCourseToResponse(updatedCourse);
+//        List<SubCategory> subCategories = subCategoryCourseRepository.findSubCategories(updatedCourse.getId());
+//        CourseResponse courseResponse = converter.fromCourseToResponse(updatedCourse, subCategories);
         return courseResponse;
     }
 

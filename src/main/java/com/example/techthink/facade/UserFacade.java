@@ -1,24 +1,32 @@
 package com.example.techthink.facade;
 
 import com.example.techthink.annotation.Facade;
+import com.example.techthink.controller.model.CourseResponse;
 import com.example.techthink.controller.model.RegisterRequest;
 import com.example.techthink.controller.model.UserResponse;
 import com.example.techthink.converter.Converter;
+import com.example.techthink.persistence.CourseSection;
 import com.example.techthink.persistence.User;
+import com.example.techthink.persistence.repository.UserSectionRepository;
 import com.example.techthink.service.DTO.UserDTO;
 import com.example.techthink.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Facade
 public class UserFacade {
+
     @Autowired
     UserService userService;
     private final Converter converter;
+    private final UserSectionRepository userSectionRepository;
 
-    public UserFacade(Converter converter) {
+    public UserFacade(Converter converter, UserSectionRepository userSectionRepository) {
         this.converter = converter;
+        this.userSectionRepository = userSectionRepository;
     }
 
 
@@ -27,7 +35,6 @@ public class UserFacade {
         User registeredUser = userService.register(userDTO);
         UserResponse userResponse = converter.fromUserToResponse(registeredUser);
         return userResponse;
-
     }
 
     public UserResponse addProfessor(RegisterRequest request){
@@ -37,14 +44,40 @@ public class UserFacade {
         return userResponse;
     }
 
+    public UserResponse editProfile(Long id, RegisterRequest request){
+        UserDTO userDTO = convertToDTO(request);
+        User update = userService.update(id, userDTO);
+        UserResponse userResponse = converter.fromUserToResponse(update);
+        return userResponse;
+    }
+
+    public UserResponse readById(Long id){
+        User user = userService.readById(id);
+        UserResponse userResponse = converter.fromUserToResponse(user);
+        return userResponse;
+    }
+
+    public List<UserResponse> readAll(){
+        List<User> users = userService.readAll();
+        List<UserResponse> collect = users.stream()
+                .map(each -> readById(each.getId()))
+                .collect(Collectors.toList());
+        return collect;
+    }
+
+    public Boolean delete(Long id){
+        return userService.delete(id);
+    }
 
     private UserDTO convertToDTO(RegisterRequest request){
         UserDTO userDTO = new UserDTO();
         userDTO.setFirstName(request.getFirstName());
         userDTO.setLastName(request.getLastName());
         userDTO.setUserName(request.getUserName());
-        userDTO.setMail(request.getMail());
+        userDTO.setEmail(request.getMail());
         userDTO.setPassword(new BCryptPasswordEncoder().encode(request.getPassword()));
+        userDTO.setDescription(request.getDescription());
+        userDTO.setProfilePictureURL(request.getProfilePictureURL());
         return userDTO;
     }
 }

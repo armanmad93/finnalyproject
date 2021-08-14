@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-public class Class {
+public class CourseSection {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -15,6 +15,7 @@ public class Class {
     private Date start_date;
     private Date end_date;
     private int capacity;
+    private String photoURL;
 
     @ManyToOne
     private Course course;
@@ -23,18 +24,19 @@ public class Class {
     private Format format;
 
     @ManyToOne
-    private Auditory auditory;
+    private Address address;
 
-    public Class() {
+    public CourseSection() {
     }
 
-    public Class(Long id, String name, String description, Date start_date, Date end_date, int capacity) {
+    public CourseSection(Long id, String name, String description, Date start_date, Date end_date, int capacity, String photoURL) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.start_date = start_date;
         this.end_date = end_date;
         this.capacity = capacity;
+        this.photoURL = photoURL;
     }
 
     public Long getId() {
@@ -85,6 +87,14 @@ public class Class {
         this.capacity = capacity;
     }
 
+    public String getPhotoURL() {
+        return photoURL;
+    }
+
+    public void setPhotoURL(String photoURL) {
+        this.photoURL = photoURL;
+    }
+
     public Course getCourse() {
         return course;
     }
@@ -101,11 +111,11 @@ public class Class {
         this.format = format;
     }
 
-    public Auditory getAuditory() {
-        return auditory;
+    public Address getAddress() {
+        return address;
     }
-
-    public void setAuditory(Auditory auditory) {
-        this.auditory = auditory;
+    public void setAddress(Address address) {
+        this.address = address;
     }
 }
+

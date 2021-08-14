@@ -3,12 +3,24 @@ package com.example.techthink.converter;
 import com.example.techthink.annotation.Convert;
 import com.example.techthink.controller.model.*;
 import com.example.techthink.persistence.*;
+import com.example.techthink.persistence.repository.SubCategoryCourseRepository;
+import com.example.techthink.persistence.repository.UserSectionRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Convert
 public class Converter {
+
+    //ALTERNATIVE????
+    private final SubCategoryCourseRepository subCategoryCourseRepository;
+    private final UserSectionRepository userSectionRepository;
+
+    public Converter(SubCategoryCourseRepository subCategoryCourseRepository, UserSectionRepository userSectionRepository) {
+        this.subCategoryCourseRepository = subCategoryCourseRepository;
+        this.userSectionRepository = userSectionRepository;
+    }
+
     public UserResponse fromUserToResponse(User user){
         UserResponse userResponse = new UserResponse();
         userResponse.setId(user.getId());
@@ -16,7 +28,51 @@ public class Converter {
         userResponse.setLast_name(user.getLast_name());
         userResponse.setUsername(user.getUsername());
         userResponse.setEmail(user.getEmail());
+        userResponse.setDescription(user.getDescription());
+        userResponse.setProfilePictureURL(user.getProfilePictureURL());
+        userResponse.setRoleName(user.getRoles().stream()
+                .map(each-> each.getName().toString())
+                .collect(Collectors.toList()));
+
+        List<CourseSection> allSectionsGivenUser = userSectionRepository.findAllSectionsGivenUser(user.getId());
+        List<CourseSectionResponse> takenSections = allSectionsGivenUser.stream()
+                .map(each -> fromSectionToResponse(each))
+                .collect(Collectors.toList());
+        userResponse.setTakenCourseSections(takenSections);
+
         return userResponse;
+    }
+
+    public CourseSectionResponse fromSectionToResponse(CourseSection section){
+        CourseSectionResponse courseSectionResponse = new CourseSectionResponse();
+        courseSectionResponse.setId(section.getId());
+        courseSectionResponse.setName(section.getName());
+        courseSectionResponse.setDescription(section.getDescription());
+        courseSectionResponse.setStartDate(section.getStart_date());
+        courseSectionResponse.setEndDate(section.getEnd_date());
+        courseSectionResponse.setCapacity(section.getCapacity());
+        courseSectionResponse.setCourse(fromCourseToResponse(section.getCourse()));
+        courseSectionResponse.setFormat(section.getFormat().getName().toString());
+        courseSectionResponse.setAddress(fromAddressToResponse(section.getAddress()));
+//        List<User> allUsersGivenSection = userSectionRepository.findAllUsersGivenSection(section.getId());
+//
+//        List<UserResponse> participants = allUsersGivenSection.stream()
+//                .map(each -> fromUserToResponse(each)).collect(Collectors.toList());
+//        courseSectionResponse.setParticipants(participants);
+        return courseSectionResponse;
+    }
+
+    public SectionParticipantsResponse fromSectionToResponseWithParticipants(CourseSection section){
+        SectionParticipantsResponse sectionParticipantsResponse = new SectionParticipantsResponse();
+        CourseSectionResponse courseSectionResponse = fromSectionToResponse(section);
+        sectionParticipantsResponse.setSectionResponse(courseSectionResponse);
+
+        List<User> allUsersGivenSection = userSectionRepository.findAllUsersGivenSection(section.getId());
+        List<UserResponse> participants = allUsersGivenSection.stream()
+                .map(each -> fromUserToResponse(each)).collect(Collectors.toList());
+
+        sectionParticipantsResponse.setParticipants(participants);
+        return sectionParticipantsResponse;
     }
 
     public AddressResponse fromAddressToResponse(Address address){
@@ -62,7 +118,13 @@ public class Converter {
                 .collect(Collectors.toList());
     }
 
-    public CourseResponse fromCourseToResponse(Course course, List<SubCategory> subCategories){
+    public CourseResponse fromCourseToResponse(Course course){
+        List<SubCategory> subCategories = subCategoryCourseRepository.findSubCategories(course.getId());
+        CourseResponse courseResponse = fromCourseToResponseGivenSubCategories(course, subCategories);
+        return courseResponse;
+    }
+
+    public CourseResponse fromCourseToResponseGivenSubCategories(Course course, List<SubCategory> subCategories){
         CourseResponse courseResponse = new CourseResponse();
         courseResponse.setId(course.getId());
         courseResponse.setName(course.getName());
@@ -74,18 +136,6 @@ public class Converter {
         courseResponse.setSubCategoryResponses(subCategoryResponses);
         return courseResponse;
     }
-
-    //public List<CourseResponse> fromCourseToResponseList(List<Course> courses, )
-//List<Course> courses = courseService.readAll();
-//        List<List<SubCategory>>
-
-//    public List<Course> fromCourseToResponseList(List<Course> courses, List<List<SubCategory>> subcategories){
-//        return courses.stream()
-//                .map(each -> fromCourseToResponse(each, subcategories.get()))
-//                .collect(Collectors.toList());
-//    }
-
-
 
 
 }

@@ -4,19 +4,22 @@ public class UserDTO {
     private String firstName;
     private String lastName;
     private String userName;
-    private String mail;
+    private String email;
     private String password;
+    private String description;
+    private String profilePictureURL;
 
     public UserDTO() {
     }
 
-    public UserDTO(String firstName, String lastName, String userName, String mail, String password) {
+    public UserDTO(String firstName, String lastName, String userName, String email, String password, String description, String profilePictureURL) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.userName = userName;
-        this.mail = mail;
+        this.email = email;
         this.password = password;
-
+        this.description = description;
+        this.profilePictureURL = profilePictureURL;
     }
 
     public String getFirstName() {
@@ -43,12 +46,12 @@ public class UserDTO {
         this.userName = userName;
     }
 
-    public String getMail() {
-        return mail;
+    public String getEmail() {
+        return email;
     }
 
-    public void setMail(String mail) {
-        this.mail = mail;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {
@@ -59,4 +62,19 @@ public class UserDTO {
         this.password = password;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getProfilePictureURL() {
+        return profilePictureURL;
+    }
+
+    public void setProfilePictureURL(String profilePictureURL) {
+        this.profilePictureURL = profilePictureURL;
+    }
 }
