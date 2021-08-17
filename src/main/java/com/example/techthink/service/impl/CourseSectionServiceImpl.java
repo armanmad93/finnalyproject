@@ -80,6 +80,13 @@ public class CourseSectionServiceImpl implements CourseSectionService {
         return !sectionRepository.existsById(id);
     }
 
+    public CourseSection uploadPicture(Long id, String profilePicURL){
+        CourseSection byId = sectionRepository.getById(id);
+        byId.setPhotoURL(profilePicURL);
+        CourseSection withPic = sectionRepository.save(byId);
+        return withPic;
+    }
+
     public Boolean deleteStudentFromSection(Long studentId, Long sectionId){
         Long relationshipId = userSectionRepository.relationshipIdGivenStudentAndSection(studentId, sectionId);
         userSectionRepository.deleteById(relationshipId);

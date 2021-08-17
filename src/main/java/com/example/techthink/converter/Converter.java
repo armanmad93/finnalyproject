@@ -5,6 +5,8 @@ import com.example.techthink.controller.model.*;
 import com.example.techthink.persistence.*;
 import com.example.techthink.persistence.repository.SubCategoryCourseRepository;
 import com.example.techthink.persistence.repository.UserSectionRepository;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -118,6 +120,14 @@ public class Converter {
                 .collect(Collectors.toList());
     }
 
+    public AssignmentResponse fromAssignmentToResponse(Assignment assignment){
+        AssignmentResponse assignmentResponse = new AssignmentResponse();
+        assignmentResponse.setId(assignment.getId());
+        assignmentResponse.setName(assignment.getName());
+        CourseSectionResponse sectionResponse = fromSectionToResponse(assignment.getCourseSection());
+        assignmentResponse.setSection(sectionResponse);
+        return assignmentResponse;
+    }
     public CourseResponse fromCourseToResponse(Course course){
         List<SubCategory> subCategories = subCategoryCourseRepository.findSubCategories(course.getId());
         CourseResponse courseResponse = fromCourseToResponseGivenSubCategories(course, subCategories);
@@ -137,5 +147,8 @@ public class Converter {
         return courseResponse;
     }
 
-
+    @Bean
+    BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 }

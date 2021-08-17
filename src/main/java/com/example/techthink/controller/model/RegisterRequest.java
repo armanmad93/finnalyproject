@@ -7,19 +7,29 @@ public class RegisterRequest {
     private String mail;
     private String password;
     private String description;
-    private String profilePictureURL;
+    //private String profilePictureURL;
 
     public RegisterRequest() {
     }
 
-    public RegisterRequest(String firstName, String lastName, String userName, String mail, String password, String description, String profilePictureURL) {
+//    public RegisterRequest(String firstName, String lastName, String userName, String mail, String password, String description, String profilePictureURL) {
+//        this.firstName = firstName;
+//        this.lastName = lastName;
+//        this.userName = userName;
+//        this.mail = mail;
+//        this.password = password;
+//        this.description = description;
+//        this.profilePictureURL = profilePictureURL;
+//    }
+
+
+    public RegisterRequest(String firstName, String lastName, String userName, String mail, String password, String description) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.userName = userName;
         this.mail = mail;
         this.password = password;
         this.description = description;
-        this.profilePictureURL = profilePictureURL;
     }
 
     public String getFirstName() {
@@ -70,11 +80,11 @@ public class RegisterRequest {
         this.description = description;
     }
 
-    public String getProfilePictureURL() {
-        return profilePictureURL;
-    }
-
-    public void setProfilePictureURL(String profilePictureURL) {
-        this.profilePictureURL = profilePictureURL;
-    }
+//    public String getProfilePictureURL() {
+//        return profilePictureURL;
+//    }
+//
+//    public void setProfilePictureURL(String profilePictureURL) {
+//        this.profilePictureURL = profilePictureURL;
+//    }
 }

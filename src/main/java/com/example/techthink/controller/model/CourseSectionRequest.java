@@ -8,7 +8,7 @@ public class CourseSectionRequest {
     private Date startDate;
     private Date endDate;
     private int capacity;
-    private String photoURL;
+    //private String photoURL;
     private Integer courseId;
     private Integer formatId;
     private Integer addressId;
@@ -16,13 +16,12 @@ public class CourseSectionRequest {
     public CourseSectionRequest() {
     }
 
-    public CourseSectionRequest(String name, String description, Date startDate, Date endDate, int capacity, String photoURL, Integer courseId, Integer formatId, Integer addressId) {
+    public CourseSectionRequest(String name, String description, Date startDate, Date endDate, int capacity, Integer courseId, Integer formatId, Integer addressId) {
         this.name = name;
         this.description = description;
         this.startDate = startDate;
         this.endDate = endDate;
         this.capacity = capacity;
-        this.photoURL = photoURL;
         this.courseId = courseId;
         this.formatId = formatId;
         this.addressId = addressId;
@@ -68,13 +67,13 @@ public class CourseSectionRequest {
         this.capacity = capacity;
     }
 
-    public String getPhotoURL() {
-        return photoURL;
-    }
-
-    public void setPhotoURL(String photoURL) {
-        this.photoURL = photoURL;
-    }
+//    public String getPhotoURL() {
+//        return photoURL;
+//    }
+//
+//    public void setPhotoURL(String photoURL) {
+//        this.photoURL = photoURL;
+//    }
 
     public Integer getCourseId() {
         return courseId;

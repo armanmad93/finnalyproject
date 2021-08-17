@@ -1,16 +1,13 @@
 package com.example.techthink.facade;
 
 import com.example.techthink.annotation.Facade;
-import com.example.techthink.controller.model.CourseResponse;
 import com.example.techthink.controller.model.RegisterRequest;
 import com.example.techthink.controller.model.UserResponse;
 import com.example.techthink.converter.Converter;
-import com.example.techthink.persistence.CourseSection;
 import com.example.techthink.persistence.User;
 import com.example.techthink.persistence.repository.UserSectionRepository;
 import com.example.techthink.service.DTO.UserDTO;
 import com.example.techthink.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.List;
@@ -19,12 +16,13 @@ import java.util.stream.Collectors;
 @Facade
 public class UserFacade {
 
-    @Autowired
-    UserService userService;
+
+    private final UserService userService;
     private final Converter converter;
     private final UserSectionRepository userSectionRepository;
 
-    public UserFacade(Converter converter, UserSectionRepository userSectionRepository) {
+    public UserFacade(UserService userService, Converter converter, UserSectionRepository userSectionRepository) {
+        this.userService = userService;
         this.converter = converter;
         this.userSectionRepository = userSectionRepository;
     }
@@ -69,6 +67,12 @@ public class UserFacade {
         return userService.delete(id);
     }
 
+    public UserResponse uploadPicture(Long id, String pictureURL){
+        User user = userService.uploadPicture(id, pictureURL);
+        UserResponse userResponse = converter.fromUserToResponse(user);
+        return userResponse;
+    }
+
     private UserDTO convertToDTO(RegisterRequest request){
         UserDTO userDTO = new UserDTO();
         userDTO.setFirstName(request.getFirstName());
@@ -77,7 +81,7 @@ public class UserFacade {
         userDTO.setEmail(request.getMail());
         userDTO.setPassword(new BCryptPasswordEncoder().encode(request.getPassword()));
         userDTO.setDescription(request.getDescription());
-        userDTO.setProfilePictureURL(request.getProfilePictureURL());
+        //userDTO.setProfilePictureURL(request.getProfilePictureURL());
         return userDTO;
     }
 }

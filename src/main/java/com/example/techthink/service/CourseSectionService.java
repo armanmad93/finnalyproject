@@ -13,5 +13,6 @@ public interface CourseSectionService{
     List<CourseSection> readAll();
     CourseSection update(Long id, CourseSectionDTO request);
     Boolean delete(Long id);
+    CourseSection uploadPicture(Long id, String profilePicURL);
 
 }

@@ -61,9 +61,16 @@ public class SectionFacade {
         return sectionService.delete(id);
     }
 
+    //this might be excluded, probably an error
     public Boolean deleteStudentFromSection(Long studentId, Long sectionId){
         Boolean aBoolean = sectionService.deleteStudentFromSection(studentId, sectionId);
         return aBoolean;
+    }
+
+    public CourseSectionResponse setSectionPic(Long sectionId, String picURL){
+        CourseSection section = sectionService.uploadPicture(sectionId, picURL);
+        CourseSectionResponse courseSectionResponse = converter.fromSectionToResponse(section);
+        return courseSectionResponse;
     }
 
     //????????
@@ -74,7 +81,7 @@ public class SectionFacade {
         courseSectionDTO.setStartDate(request.getStartDate());
         courseSectionDTO.setEndDate(request.getEndDate());
         courseSectionDTO.setCapacity(request.getCapacity());
-        courseSectionDTO.setPhotoURL(request.getPhotoURL());
+        //courseSectionDTO.setPhotoURL(request.getPhotoURL());
         courseSectionDTO.setCourseId(request.getCourseId());
         courseSectionDTO.setFormatId(request.getFormatId());
         courseSectionDTO.setAddressId(request.getAddressId());
@@ -91,7 +98,7 @@ public class SectionFacade {
         courseSectionDTO.setStartDate(request.getStartDate());
         courseSectionDTO.setEndDate(request.getEndDate());
         courseSectionDTO.setCapacity(request.getCapacity());
-        courseSectionDTO.setPhotoURL(request.getPhotoURL());
+        //courseSectionDTO.setPhotoURL(request.getPhotoURL());
         courseSectionDTO.setCourseId(request.getCourseId());
         courseSectionDTO.setFormatId(request.getFormatId());
         courseSectionDTO.setAddressId(request.getAddressId());

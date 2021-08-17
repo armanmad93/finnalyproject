@@ -1,12 +1,15 @@
 package com.example.techthink.service.impl;
 
 
+import com.example.techthink.config.UserPrincipal;
 import com.example.techthink.persistence.User;
 import com.example.techthink.persistence.repository.UserSectionRepository;
 import com.example.techthink.persistence.repository.UserRepository;
 import com.example.techthink.service.DTO.UserDTO;
 import com.example.techthink.service.RoleService;
 import com.example.techthink.service.UserService;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,14 +34,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User register(UserDTO request){
+    public User register(UserDTO request) {
         User user = buildUser(request);
         User savedUser = userRepository.save(user);
         User addRolledUser = addRoleToUser(savedUser.getId(), 2L);  //STUDENT
         return addRolledUser;
     }
 
-    public User addProfessor(UserDTO request){
+    public User addProfessor(UserDTO request) {
         User user = buildUser(request);
         User savedUser = userRepository.save(user);
         User addRolledUser = addRoleToUser(savedUser.getId(), 3L); //PROFESSOR
@@ -57,7 +60,7 @@ public class UserServiceImpl implements UserService {
         return all;
     }
 
-    public User update(Long id, UserDTO request){
+    public User update(Long id, UserDTO request) {
         User byId = userRepository.getById(id);
         User user = buildUser(byId, request);
         User updatedUser = userRepository.save(user);
@@ -72,8 +75,14 @@ public class UserServiceImpl implements UserService {
         return !userRepository.existsById(id);
     }
 
+    public User uploadPicture(Long id, String profilePicURL) {
+        User byId = userRepository.getById(id);
+        byId.setProfilePictureURL(profilePicURL);
+        User updated = userRepository.save(byId);
+        return updated;
+    }
 
-    private User buildUser(User user, UserDTO request){
+    private User buildUser(User user, UserDTO request) {
         user.setFirst_name(request.getFirstName());
         user.setLast_name(request.getLastName());
         user.setUsername(request.getUserName());
@@ -83,7 +92,8 @@ public class UserServiceImpl implements UserService {
         user.setProfilePictureURL(request.getProfilePictureURL());
         return user;
     }
-    private User buildUser(UserDTO request){
+
+    private User buildUser(UserDTO request) {
         User user = new User();
         user.setFirst_name(request.getFirstName());
         user.setLast_name(request.getLastName());
@@ -98,7 +108,7 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    private User addRoleToUser(Long userId, Long roleId){
+    private User addRoleToUser(Long userId, Long roleId) {
         User byId = userRepository.getById(userId);
         byId.getRoles().add(roleService.getRoleById(roleId));
         User saved = userRepository.save(byId);
@@ -106,7 +116,12 @@ public class UserServiceImpl implements UserService {
     }
 
 
-
-
-
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User userEntity = userRepository.loadUserByUsernameOrEmail(username);
+        if (userEntity == null) {
+            throw new UsernameNotFoundException(username);
+        }
+        return new UserPrincipal(userEntity);
+    }
 }

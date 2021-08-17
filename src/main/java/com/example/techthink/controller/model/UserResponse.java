@@ -25,6 +25,7 @@ public class UserResponse {
         this.takenCourseSections = takenCourseSections;
     }
 
+
     public UserResponse() {
     }
 
